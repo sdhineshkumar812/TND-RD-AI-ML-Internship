@@ -1,0 +1,74 @@
+{
+  "experiment_name": "Local LLM Quantization Benchmark (FP16 vs 4-bit)",
+  "models": {
+    "fp16": {
+      "name": "Qwen2.5-0.5B-Instruct (FP16 / Unquantized)",
+      "ollama_tag": "qwen2.5:0.5b-instruct-fp16",
+      "hf_id": "Qwen/Qwen2.5-0.5B-Instruct",
+      "quantization": "FP16"
+    },
+    "int4": {
+      "name": "Qwen2.5-0.5B-Instruct (4-bit Q4_K_M)",
+      "ollama_tag": "qwen2.5:0.5b",
+      "hf_id": "Qwen/Qwen2.5-0.5B-Instruct",
+      "quantization": "4-bit"
+    }
+  },
+  "generation_params": {
+    "max_tokens": 128,
+    "temperature": 0.0,
+    "top_p": 1.0
+  },
+  "prompts": [
+    {
+      "id": "p01",
+      "category": "Summarization",
+      "prompt": "Summarize the following passage in one concise sentence: Artificial intelligence models trained on massive multimodal datasets have achieved unprecedented performance across computer vision and natural language processing tasks, leading to rapid enterprise adoption."
+    },
+    {
+      "id": "p02",
+      "category": "Code Generation",
+      "prompt": "Write a Python function `binary_search(arr, target)` that returns the index of target in a sorted list, or -1 if not found. Include type hints."
+    },
+    {
+      "id": "p03",
+      "category": "Mathematical Reasoning",
+      "prompt": "A train travels at 60 km/h for 2.5 hours, and then at 80 km/h for 1.5 hours. What is the total distance traveled and the average speed for the entire trip?"
+    },
+    {
+      "id": "p04",
+      "category": "Information Extraction",
+      "prompt": "Extract the company name, acquisition price, and target company from this text: 'In October 2024, Cyberdyne Systems completed the acquisition of Omni Robotics for $450 million in an all-cash transaction.'"
+    },
+    {
+      "id": "p05",
+      "category": "Multi-step Logic",
+      "prompt": "Alice is taller than Bob. Charlie is shorter than Alice but taller than Bob. David is taller than Charlie but shorter than Alice. Order the four people from tallest to shortest."
+    },
+    {
+      "id": "p06",
+      "category": "Roleplay & Adherence",
+      "prompt": "You are a Linux systems administrator. Explain in exactly three bullet points what the command `chmod 755 script.sh` does."
+    },
+    {
+      "id": "p07",
+      "category": "Technical Explanation",
+      "prompt": "Briefly explain the difference between a Transformer's Key, Query, and Value matrices using an intuitive analogy."
+    },
+    {
+      "id": "p08",
+      "category": "Creative Writing",
+      "prompt": "Write a haiku about compiling machine learning models onto edge hardware."
+    },
+    {
+      "id": "p09",
+      "category": "Few-shot Classification",
+      "prompt": "Classify the sentiment as Positive or Negative:\nReview: 'The battery lasts all day and screen is crisp.' Sentiment: Positive\nReview: 'Lags frequently and customer service was unhelpful.' Sentiment: Negative\nReview: 'Setup took five minutes and works flawlessly.' Sentiment:"
+    },
+    {
+      "id": "p10",
+      "category": "Factual Retrieval",
+      "prompt": "What is the capital of Australia, and what is the primary river flowing through it?"
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+[
+  {
+    "id": "q01",
+    "question": "What is the total number of pretraining tokens used to train the Llama 2 models?",
+    "target_page": 5,
+    "key_phrases": ["2 trillion tokens", "2.0T tokens", "2 trillion"],
+    "ground_truth_answer": "Llama 2 was pretrained on 2 trillion (2.0T) tokens of data from publicly available sources."
+  },
+  {
+    "id": "q02",
+    "question": "What context window length does Llama 2 support during pretraining?",
+    "target_page": 5,
+    "key_phrases": ["4096", "4k context", "context length of 4096"],
+    "ground_truth_answer": "Llama 2 models support a context window length of 4096 tokens, doubling the context length of Llama 1."
+  },
+  {
+    "id": "q03",
+    "question": "Which architectural attention mechanism was introduced for the larger 34B and 70B models to improve inference scalability?",
+    "target_page": 5,
+    "key_phrases": ["Grouped-Query Attention", "GQA", "grouped query"],
+    "ground_truth_answer": "Grouped-Query Attention (GQA) was introduced for the 34B and 70B models to improve inference efficiency and scalability."
+  },
+  {
+    "id": "q04",
+    "question": "What optimizer and learning rate schedule was used during the pretraining of Llama 2?",
+    "target_page": 5,
+    "key_phrases": ["AdamW", "cosine learning rate", "beta1=0.9", "weight decay of 0.1"],
+    "ground_truth_answer": "Llama 2 used the AdamW optimizer (beta1=0.9, beta2=0.95, eps=1e-5) with a cosine learning rate schedule, 2000 warmup steps, and weight decay of 0.1."
+  },
+  {
+    "id": "q05",
+    "question": "What two separate reward models are trained during RLHF to reflect human preferences?",
+    "target_page": 10,
+    "key_phrases": ["Helpfulness", "Safety", "two separate reward models"],
+    "ground_truth_answer": "Two separate reward models were trained during RLHF: one optimized for Helpfulness and another optimized for Safety."
+  },
+  {
+    "id": "q06",
+    "question": "What two reinforcement learning algorithms were used during the RLHF fine-tuning stages of Llama 2-Chat?",
+    "target_page": 11,
+    "key_phrases": ["Rejection Sampling", "PPO", "Proximal Policy Optimization"],
+    "ground_truth_answer": "The RLHF fine-tuning pipeline combined Rejection Sampling fine-tuning and Proximal Policy Optimization (PPO)."
+  },
+  {
+    "id": "q07",
+    "question": "What is Ghost Attention (GAtt) designed to control in multi-turn dialogues?",
+    "target_page": 14,
+    "key_phrases": ["Ghost Attention", "GAtt", "multi-turn", "system instruction"],
+    "ground_truth_answer": "Ghost Attention (GAtt) helps models maintain consistency and respect initial system instructions throughout multi-turn dialogues."
+  },
+  {
+    "id": "q08",
+    "question": "How many hours of GPU compute were consumed during the pretraining of Llama 2 models on A100-80GB GPUs?",
+    "target_page": 18,
+    "key_phrases": ["3.3 million", "GPU hours", "A100-80GB"],
+    "ground_truth_answer": "A total of approximately 3.3 million GPU hours on NVIDIA A100-80GB GPUs were used during pretraining."
+  },
+  {
+    "id": "q09",
+    "question": "What type of personal data was intentionally scrubbed from the pretraining corpus?",
+    "target_page": 5,
+    "key_phrases": ["personal data", "PII", "personally identifiable information"],
+    "ground_truth_answer": "Data containing personal identifiable information (PII) from sites known to aggregate private personal information was scrubbed."
+  },
+  {
+    "id": "q10",
+    "question": "What are the three primary released model parameter sizes in the Llama 2 family?",
+    "target_page": 5,
+    "key_phrases": ["7B", "13B", "70B"],
+    "ground_truth_answer": "Llama 2 was released in three parameter scales: 7B, 13B, and 70B."
+  },
+  {
+    "id": "q11",
+    "question": "What peak learning rate was chosen for the 7B and 13B models versus the 70B model?",
+    "target_page": 5,
+    "key_phrases": ["3e-4", "1.5e-4", "peak learning rate"],
+    "ground_truth_answer": "A peak learning rate of 3e-4 was chosen for 7B and 13B, while 1.5e-4 was chosen for the 70B model."
+  },
+  {
+    "id": "q12",
+    "question": "What methodology was employed to probe for adversarial and safety risks in Llama 2?",
+    "target_page": 22,
+    "key_phrases": ["red teaming", "adversarial", "safety", "expert"],
+    "ground_truth_answer": "Manual red-teaming involving diverse domain experts across adversarial probing and multi-turn risk scenarios was employed."
+  },
+  {
+    "id": "q13",
+    "question": "What loss function formulation is used to train the Helpfulness and Safety reward models?",
+    "target_page": 11,
+    "key_phrases": ["binary ranking loss", "margin", "sigmoid", "log(sigma"],
+    "ground_truth_answer": "A binary ranking loss with margin: L_R = -E[log(sigmoid(r(x, y_c) - r(x, y_r) - margin))]."
+  },
+  {
+    "id": "q14",
+    "question": "What score did Llama 2 70B achieve on the MMLU 5-shot benchmark?",
+    "target_page": 8,
+    "key_phrases": ["68.9", "MMLU"],
+    "ground_truth_answer": "Llama 2 70B achieved a score of 68.9% on MMLU (5-shot)."
+  },
+  {
+    "id": "q15",
+    "question": "What tokenizer library and vocabulary size was utilized for Llama 2?",
+    "target_page": 5,
+    "key_phrases": ["32k", "32,000", "SentencePiece", "BPE"],
+    "ground_truth_answer": "Llama 2 used the standard SentencePiece BPE tokenizer with a vocabulary size of 32,000 (32k) tokens."
+  }
+]
