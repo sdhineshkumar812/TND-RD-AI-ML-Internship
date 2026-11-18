@@ -1,0 +1,18 @@
+{
+  "FP16": {
+    "configuration": "FP16",
+    "total_time_seconds": 9.758,
+    "average_latency_seconds": 0.976,
+    "generated_tokens": 320,
+    "tokens_per_second": 32.794,
+    "peak_vram_GB": 1.105
+  },
+  "4-bit_NF4": {
+    "configuration": "4-bit NF4",
+    "total_time_seconds": 18.175,
+    "average_latency_seconds": 1.817,
+    "generated_tokens": 320,
+    "tokens_per_second": 17.607,
+    "peak_vram_GB": 0.615
+  }
+}

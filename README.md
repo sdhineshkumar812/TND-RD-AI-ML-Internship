@@ -31,7 +31,8 @@ For the complete verified technical report, see **[`report/FINAL_VERIFIED_REPORT
   - **Training**: **3 epochs**, final training loss **0.27636**
   - **Base Model Accuracy (zero-shot)**: **65.0%** (100 test samples)
   - **LoRA Fine-Tuned Accuracy**: **86.0%** (**+21.0 percentage points** improvement)
-  - **Verified Per-Class LoRA F1** (from [`task1_lora/results/7b_memory_calculation.md`](task1_lora/results/7b_memory_calculation.md)): World **0.87** (P 1.00, R 0.77, n=22), Sports **0.96** (P 0.93, R 1.00, n=27), Business **0.81** (P 0.81, R 0.81, n=32), Sci/Tech **0.78** (P 0.73, R 0.84, n=19); Macro F1 **0.86**.
+  - **Verified Per-Class LoRA F1** (from [`classification_report.txt`](task1_lora/results/classification_report.txt) and [`confusion_matrix.csv`](task1_lora/results/confusion_matrix.csv)): World **0.87** (P 1.00, R 0.77, n=22), Sports **0.96** (P 0.93, R 1.00, n=27), Business **0.81** (P 0.81, R 0.81, n=32), Sci/Tech **0.78** (P 0.73, R 0.84, n=19); Macro F1 **0.86**.
+  - **Misclassification Examples**: All 14 test errors are preserved in [`failure_examples.json`](task1_lora/results/failure_examples.json).
 
 ---
 
@@ -39,14 +40,17 @@ For the complete verified technical report, see **[`report/FINAL_VERIFIED_REPORT
 - **Corpus & Extraction (Measured)**: *Llama 2: Open Foundation and Fine-Tuned Chat Models* (`arXiv:2307.09288`), **77 pages** (**263,678 characters**) extracted page-by-page via PyMuPDF.
 - **Dual Token Chunking (Measured)**: `all-MiniLM-L6-v2` sliding-window tokenization producing **326 chunks** (256-token window, 32-token overlap) and **177 chunks** (512-token window, 64-token overlap).
 - **Retrieval & Re-Ranking Stack (Code-Verified)**:
-  - **Embeddings**: `sentence-transformers/all-MiniLM-L6-v2` (**384 dimensions**, $L_2$-normalized).
+  - **Embeddings**: `sentence-transformers/all-MiniLM-L6-v2` (**384 dimensions**, $L_2$-normalized; `embeddings_256.npy` and `embeddings_512.npy`).
   - **Vector Retrieval**: FAISS `IndexFlatIP` with exact NumPy cosine similarity fallback.
   - **Sparse Retrieval**: Pure-Python Okapi BM25 ($k_1 = 1.5, b = 0.75$).
   - **Hybrid & Re-Ranking**: Reciprocal Rank Fusion (`k = 60`) and Cross-Encoder (`cross-encoder/ms-marco-MiniLM-L-6-v2`).
 - **Evaluation (15 Verified Questions, Target-Page Matching)**:
   - **BM25 256-token (Measured Locally)**: Recall@5 = **100.0%** (15/15), MRR@5 = **0.8000**; Recall@1 = **66.7%** (10/15; Top-1 misses: `q01`, `q06`, `q09`, `q11`, `q13`).
   - **BM25 512-token (Measured Locally)**: Recall@5 = **100.0%** (15/15), MRR@5 = **0.8722** — **highest MRR@5 among all reported configurations**.
-  - **Dense, Hybrid & Cross-Encoder**: **Hybrid 256-token** ranked best specifically among the Dense, Hybrid, and Cross-Encoder pipelines (not overall best). Raw JSON outputs for these three modes are currently missing from disk (see *Missing Artifacts* below).
+  - **Dense Retrieval (`all-MiniLM-L6-v2`)**: 256-tok: Recall@5 = **40.0%**, MRR@5 = **0.1189**; 512-tok: Recall@5 = **40.0%**, MRR@5 = **0.1689**.
+  - **Hybrid Retrieval (Dense + BM25 RRF)**: 256-tok: Recall@5 = **53.33%**, MRR@5 = **0.2911** (**best specifically among Dense, Hybrid, and Cross-Encoder**); 512-tok: Recall@5 = **53.33%**, MRR@5 = **0.2800**.
+  - **Cross-Encoder Re-Ranking**: 256-tok: Recall@5 = **46.67%**, MRR@5 = **0.2856**, Recall@1 = **20.0%**; 512-tok: Recall@5 = **46.67%**, MRR@5 = **0.2744**, Recall@1 = **20.0%**.
+  - *Evaluation Note*: Relevancy is assessed via target-page matching (`evaluate_rag.py`), which credits a retrieval hit if a retrieved chunk originates from the question's target PDF page.
 
 ---
 
@@ -79,7 +83,7 @@ All analytical memory estimates use consistent binary **GiB** ($1\text{ GiB} = 1
 
 - **20-User Serving Capacity Plan on a 24 GiB GPU ($B = 20, S = 2048$, FP16 KV Cache, 4-bit 7B Model)**:
   - **MHA ($n_{\text{kv}} = 32$, e.g., Llama 2 7B)**: 3.59 GiB weights + ~1.50 GiB overhead + 20.00 GiB KV cache = **~25.09 GiB** (conditional OOM on 24 GiB).
-  - **GQA ($n_{\text{kv}} = 8$, e.g., Qwen2.5-7B / Mistral 7B)**: 3.59 GiB weights + ~1.50 GiB overhead + 5.00 GiB KV cache = **~10.09 GiB** (conditionally feasible with ~13.91 GiB headroom using PagedAttention and continuous batching).
+  - **GQA ($n_{\text{kv}} = 8$, e.g., Qwen2.5-7B / Mistral 7B)**: 3.59 GiB weights + ~1.50 GiB overhead + 5.00 GiB KV cache = **~10.09 GiB** (conditionally feasible with ~13.91 GiB headroom using PagedAttention and continuous batching). Capacity figures are analytical estimates, not measured benchmarks.
 
 ---
 
@@ -107,7 +111,14 @@ TnDrr-AI-ML/
 ├── task1_lora/                             # Task 1: LoRA Fine-Tuning & 7B VRAM Analysis
 │   ├── configs/lora_config.json
 │   ├── notebooks/task1_lora_colab.ipynb    # Colab T4 GPU notebook
-│   ├── results/7b_memory_calculation.md    # VRAM report + verified LoRA classification report
+│   ├── results/
+│   │   ├── 7b_memory_calculation.md        # VRAM derivations & formulas (39.98M params)
+│   │   ├── classification_report.txt       # Per-class precision, recall, F1
+│   │   ├── confusion_matrix.csv            # 4x4 classification confusion matrix
+│   │   ├── failure_examples.json           # 14 documented misclassifications
+│   │   ├── lora_predictions.json           # 100 test set predictions
+│   │   ├── metrics.json                    # Summary accuracy, loss, and epochs
+│   │   └── lora_adapter/                   # Exported safetensors weights & config
 │   ├── src/{__init__,data_loader,model_utils,evaluate,memory_calc,train_lora}.py
 │   ├── run_task1.py
 │   └── README.md
@@ -115,12 +126,23 @@ TnDrr-AI-ML/
 │   ├── data/
 │   │   ├── ground_truth_qa.json            # 15 manually authored ground-truth QA pairs
 │   │   └── llama2_research_paper.pdf       # 77-page Llama 2 paper (gitignored download)
+│   ├── results/
+│   │   ├── chunks_256.json / chunks_512.json
+│   │   ├── embeddings_256.npy / embeddings_512.npy
+│   │   ├── dense_retrieval_results.json / comparison.csv
+│   │   ├── hybrid_retrieval_results.json / comparison.csv
+│   │   ├── cross_encoder_results.json / comparison.csv
+│   │   └── task2_summary.json
 │   ├── src/{__init__,download_pdf,pdf_extractor,chunking,retrieval,reranker,generator,evaluate_rag}.py
 │   ├── run_task2.py
 │   └── README.md
 ├── task3_optimization/                     # Task 3: LLM Quantization & Capacity Planning
 │   ├── configs/benchmark_config.json       # 10 standardized evaluation prompts
 │   ├── notebooks/task3_optimization_colab.ipynb # Colab T4 GPU benchmark notebook
+│   ├── results/
+│   │   ├── capacity_analysis.json          # 20-user MHA vs. GQA serving capacity model
+│   │   ├── task3_benchmark_results.csv     # Measured benchmark latency, throughput, VRAM
+│   │   └── task3_benchmark_results.json    # JSON benchmark metrics
 │   ├── src/
 │   │   ├── __init__.py
 │   │   ├── benchmark.py                    # Ollama/HTTP latency & telemetry profiler
@@ -170,14 +192,19 @@ python -m task3_optimization.run_task3 --mode guide
 
 ### 3. Google Colab GPU Execution
 1. **Task 1 (LoRA Fine-Tuning)**: Upload [`task1_lora/notebooks/task1_lora_colab.ipynb`](task1_lora/notebooks/task1_lora_colab.ipynb) to Google Colab, set runtime to **T4 GPU**, run all cells, and extract exported artifacts into `task1_lora/results/`.
-2. **Task 3 (FP16 vs. 4-bit NF4 Benchmark)**: Upload [`task3_optimization/notebooks/task3_optimization_colab.ipynb`](task3_optimization/notebooks/task3_optimization_colab.ipynb) to Google Colab (**T4 GPU**), run all cells, and save `benchmark_results.json` to `task3_optimization/results/`.
+2. **Task 3 (FP16 vs. 4-bit NF4 Benchmark)**: Upload [`task3_optimization/notebooks/task3_optimization_colab.ipynb`](task3_optimization/notebooks/task3_optimization_colab.ipynb) to Google Colab (**T4 GPU**), run all cells, and save `task3_benchmark_results.json` to `task3_optimization/results/`.
 
 ---
 
-## Missing Raw Artifacts (Transparency Notice)
+## Repository Artifact Status & Transparency Notice
 
-To avoid fabricating results or claiming unarchived outputs exist on disk, the following raw Colab/benchmark artifacts are **not currently stored in the repository** and should be imported into their respective `results/` folders for complete raw-artifact reproducibility:
+All primary empirical data files and benchmark results are archived and verified in their respective folders:
+- **Task 1 (`task1_lora/results/`)**: `metrics.json` (accuracy 86.0% vs. base 65.0%, training loss 0.27636, 3 epochs), `classification_report.txt` (per-class precision/recall/F1), `confusion_matrix.csv` (full 4x4 matrix), `failure_examples.json` (all 14 misclassifications), `lora_predictions.json` (all 100 test predictions), and the trained LoRA adapter in `lora_adapter/` (`adapter_model.safetensors`, `adapter_config.json`, tokenizer files).
+- **Task 2 (`task2_rag/results/`)**: Preprocessed chunk files (`chunks_256.json`, `chunks_512.json`), normalized embeddings (`embeddings_256.npy`, `embeddings_512.npy`), full evaluation query results (`dense_retrieval_results.json`, `hybrid_retrieval_results.json`, `cross_encoder_results.json`), comparison CSVs (`dense_retrieval_comparison.csv`, `hybrid_retrieval_comparison.csv`, `cross_encoder_comparison.csv`), and `task2_summary.json`.
+- **Task 3 (`task3_optimization/results/`)**: Measured benchmark metrics (`task3_benchmark_results.json`, `task3_benchmark_results.csv`) and analytical serving capacity model (`capacity_analysis.json`).
 
-- **Task 1 (`task1_lora/results/`)**: Base-model per-class classification report, base and LoRA confusion matrix arrays/PNG plots (`confusion_matrix_*.png`), and raw JSON metric/failure exports (`metrics_*.json`, `failures_*.json`).
-- **Task 2 (`task2_rag/results/`)**: Saved Dense, Hybrid, and Cross-Encoder metric tables (`benchmark_metrics.json`), saved retrieval failure logs (`retrieval_failures.json`), and grounded citation answer outputs (`sample_answers_with_citations.json`).
-- **Task 3 (`task3_optimization/results/`)**: Raw per-prompt generated text outputs (`benchmark_results.json`), host RAM logs per prompt, and local Ollama/llama.cpp daemon benchmark logs.
+### Genuinely Missing Non-Critical Artifacts (Transparent Notice)
+To maintain strict scientific honesty, three non-critical raw outputs are noted as absent from the workspace:
+- **Task 1**: Visual graphic plot image `confusion_matrix.png` (matrix values are fully preserved in `confusion_matrix.csv`).
+- **Task 2**: Standalone `sample_answers_with_citations.json` file (per-query retrieved chunks, target pages, and candidate rankings for all 15 questions are fully preserved in the retrieval JSONs).
+- **Task 3**: Raw per-prompt generated text logs for each of the 10 benchmark prompts (summary benchmark metrics and latency/VRAM numbers are fully preserved in `task3_benchmark_results.json` and `.csv`).

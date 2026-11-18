@@ -1,0 +1,9 @@
+{
+  "scenario": "20 concurrent users",
+  "MHA_estimated_total_memory_GB": 27.0,
+  "GQA_estimated_total_memory_GB": 10.96,
+  "available_GPU_memory_GB": 24.0,
+  "MHA_status": "Exceeds 24 GB assumed capacity",
+  "GQA_status": "Estimated to fit within 24 GB",
+  "note": "Capacity figures are project estimates, not measured benchmark results. Actual usage depends on model, context length, batch size and serving configuration."
+}

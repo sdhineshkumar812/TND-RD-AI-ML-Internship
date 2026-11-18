@@ -1,0 +1,11 @@
+{
+    "base_model_accuracy": 65.0,
+    "lora_model_accuracy": 86.0,
+    "correct": 86,
+    "incorrect": 14,
+    "total_samples": 100,
+    "improvement_percentage_points": 21.0,
+    "training_loss": 0.2763568992614746,
+    "epochs": 3,
+    "training_samples": 2000
+}

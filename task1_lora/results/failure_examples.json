@@ -1,0 +1,86 @@
+[
+    {
+        "text": "China's inflation rate slows sharply but problems remain (AFP) AFP - China's inflation rate eased sharply in October as government efforts to cool the economy began to really bite, with food prices, one of the main culprits, showing some signs of slowing, official data showed.",
+        "actual": "World",
+        "predicted": "Business",
+        "correct": false
+    },
+    {
+        "text": "PeopleSoft revises third-quarter profit Oracle target adds \\$2.6 million to bottom line after tax adjustment related to ex-CEO's severance package.",
+        "actual": "Sci/Tech",
+        "predicted": "Business",
+        "correct": false
+    },
+    {
+        "text": "Hasbro's No Conehead Its Saturday Night Live version of \"Trivial Pursuit\" is good strategy for staying ahead of age compression.",
+        "actual": "Business",
+        "predicted": "Sci/Tech",
+        "correct": false
+    },
+    {
+        "text": "India's Tata expands regional footprint via NatSteel buyout (AFP) AFP - India's Tata Iron and Steel Company Ltd. took a strategic step to expand its Asian footprint with the announcement it will buy the Asia-Pacific steel operations of Singapore's NatSteel Ltd.",
+        "actual": "World",
+        "predicted": "Business",
+        "correct": false
+    },
+    {
+        "text": "Ken Caminiti, 1996 NL MVP, Dies at Age 41 NEW YORK - Ken Caminiti, the 1996 National League MVP who later admitted using steroids during his major league career, died Sunday. He was 41...",
+        "actual": "World",
+        "predicted": "Sports",
+        "correct": false
+    },
+    {
+        "text": "Cocoa prices down but Ivorian exports still blocked World cocoa prices were down on Tuesday but off the day #39;s lows as exports remained on hold after mob violence and military clashes in Ivory Coast, the key global supplier, traders said.",
+        "actual": "World",
+        "predicted": "Business",
+        "correct": false
+    },
+    {
+        "text": "Rivals Try to Turn Tables on Charles Schwab By MICHAEL LIEDTKE     SAN FRANCISCO (AP) -- With its low prices and iconoclastic attitude, discount stock broker Charles Schwab Corp. (SCH) represented an annoying stone in Wall Street's wing-tipped shoes for decades...",
+        "actual": "Sci/Tech",
+        "predicted": "Business",
+        "correct": false
+    },
+    {
+        "text": "Hewlett-Packard buys Synstar Palo Alto-based Hewlett-Packard Co. has bought IT services company Synstar plc, of Bracknell, England for about \\$293.3 million. Synstar has some 1,500 customers across Europe, selling IT support for various computer platforms.",
+        "actual": "Business",
+        "predicted": "Sci/Tech",
+        "correct": false
+    },
+    {
+        "text": "Level 3 Acquires Sprint #39;s Wholesale Dial-Up Internet Business Level 3 today announced that it has purchased Sprint #39;s wholesale dial-up Internet access business for \\$34 million in cash. Sprint is one of the largest providers of wholesale dial-up service to ISPs in North America.",
+        "actual": "Business",
+        "predicted": "Sci/Tech",
+        "correct": false
+    },
+    {
+        "text": "Hyundai signs deal for China truck plant Hyundai Motor Co. said yesterday that it has signed an agreement with a Chinese company, Jianghuai Automobile Corp., to build a commercial vehicle and engine plant in China #39;s Anhui province.",
+        "actual": "Sci/Tech",
+        "predicted": "Business",
+        "correct": false
+    },
+    {
+        "text": "Dogs said to smell cancer signs  LONDON -- It has long been suspected that man's best friend has a special ability to sense when something is wrong with us. Now, the first experiment to verify that scientifically has demonstrated that dogs are able to smell cancer.",
+        "actual": "World",
+        "predicted": "Sci/Tech",
+        "correct": false
+    },
+    {
+        "text": "Wall St.'s Nest Egg - the Housing Sector  NEW YORK (Reuters) - If there were any doubts that we're  still living in the era of the stay-at-home economy, the rows  of empty seats at the Athens Olympics should help erase them.",
+        "actual": "Business",
+        "predicted": "Sports",
+        "correct": false
+    },
+    {
+        "text": "Symantec Said to Be in Talks for Veritas Symantec, which produces the Norton line of computer products, is in talks to acquire Veritas Software, a maker of data backup programs.",
+        "actual": "Business",
+        "predicted": "Sci/Tech",
+        "correct": false
+    },
+    {
+        "text": "The Handbag? Total Knockoff. The Price Tag? All Too Real. It is as much a rite of the New York holiday season as sidewalk Santas or crowded Fifth Avenue sidewalks: the proliferation of hawkers selling counterfeit products like the fake Fendi handbag, the replica Rolex watch and the pirated DVD.",
+        "actual": "Business",
+        "predicted": "Sci/Tech",
+        "correct": false
+    }
+]

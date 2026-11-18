@@ -1,0 +1,474 @@
+{
+  "256": {
+    "metrics": {
+      "chunk_size": 256,
+      "total_questions": 15,
+      "Recall@1": 0.0,
+      "Recall@5": 0.4,
+      "MRR@5": 0.1189
+    },
+    "results": [
+      {
+        "id": "q01",
+        "question": "What is the total number of pretraining tokens used to train the Llama 2 models?",
+        "target_page": 5,
+        "retrieved_pages": [
+          6,
+          6,
+          77,
+          5,
+          77
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 1,
+        "reciprocal_rank": 0.25
+      },
+      {
+        "id": "q02",
+        "question": "What context window length does Llama 2 support during pretraining?",
+        "target_page": 5,
+        "retrieved_pages": [
+          47,
+          77,
+          4,
+          77,
+          77
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      },
+      {
+        "id": "q03",
+        "question": "Which architectural attention mechanism was introduced for the larger 34B and 70B models to improve inference scalability?",
+        "target_page": 5,
+        "retrieved_pages": [
+          47,
+          35,
+          47,
+          6,
+          48
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      },
+      {
+        "id": "q04",
+        "question": "What optimizer and learning rate schedule was used during the pretraining of Llama 2?",
+        "target_page": 5,
+        "retrieved_pages": [
+          77,
+          5,
+          5,
+          77,
+          77
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 1,
+        "reciprocal_rank": 0.5
+      },
+      {
+        "id": "q05",
+        "question": "What two separate reward models are trained during RLHF to reflect human preferences?",
+        "target_page": 10,
+        "retrieved_pages": [
+          13,
+          11,
+          52,
+          10,
+          14
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 1,
+        "reciprocal_rank": 0.25
+      },
+      {
+        "id": "q06",
+        "question": "What two reinforcement learning algorithms were used during the RLHF fine-tuning stages of Llama 2-Chat?",
+        "target_page": 11,
+        "retrieved_pages": [
+          32,
+          5,
+          13,
+          10,
+          77
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      },
+      {
+        "id": "q07",
+        "question": "What is Ghost Attention (GAtt) designed to control in multi-turn dialogues?",
+        "target_page": 14,
+        "retrieved_pages": [
+          16,
+          54,
+          8,
+          16,
+          54
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      },
+      {
+        "id": "q08",
+        "question": "How many hours of GPU compute were consumed during the pretraining of Llama 2 models on A100-80GB GPUs?",
+        "target_page": 18,
+        "retrieved_pages": [
+          7,
+          7,
+          77,
+          8,
+          77
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      },
+      {
+        "id": "q09",
+        "question": "What type of personal data was intentionally scrubbed from the pretraining corpus?",
+        "target_page": 5,
+        "retrieved_pages": [
+          21,
+          20,
+          20,
+          75,
+          5
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 1,
+        "reciprocal_rank": 0.2
+      },
+      {
+        "id": "q10",
+        "question": "What are the three primary released model parameter sizes in the Llama 2 family?",
+        "target_page": 5,
+        "retrieved_pages": [
+          8,
+          77,
+          4,
+          77,
+          77
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      },
+      {
+        "id": "q11",
+        "question": "What peak learning rate was chosen for the 7B and 13B models versus the 70B model?",
+        "target_page": 5,
+        "retrieved_pages": [
+          76,
+          15,
+          48,
+          5,
+          6
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 1,
+        "reciprocal_rank": 0.25
+      },
+      {
+        "id": "q12",
+        "question": "What methodology was employed to probe for adversarial and safety risks in Llama 2?",
+        "target_page": 22,
+        "retrieved_pages": [
+          77,
+          4,
+          4,
+          35,
+          3
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      },
+      {
+        "id": "q13",
+        "question": "What loss function formulation is used to train the Helpfulness and Safety reward models?",
+        "target_page": 11,
+        "retrieved_pages": [
+          52,
+          24,
+          26,
+          58,
+          60
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      },
+      {
+        "id": "q14",
+        "question": "What score did Llama 2 70B achieve on the MMLU 5-shot benchmark?",
+        "target_page": 8,
+        "retrieved_pages": [
+          49,
+          49,
+          8,
+          8,
+          48
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 1,
+        "reciprocal_rank": 0.3333333333333333
+      },
+      {
+        "id": "q15",
+        "question": "What tokenizer library and vocabulary size was utilized for Llama 2?",
+        "target_page": 5,
+        "retrieved_pages": [
+          6,
+          77,
+          34,
+          47,
+          43
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      }
+    ]
+  },
+  "512": {
+    "metrics": {
+      "chunk_size": 512,
+      "total_questions": 15,
+      "Recall@1": 0.0,
+      "Recall@5": 0.4,
+      "MRR@5": 0.1689
+    },
+    "results": [
+      {
+        "id": "q01",
+        "question": "What is the total number of pretraining tokens used to train the Llama 2 models?",
+        "target_page": 5,
+        "retrieved_pages": [
+          6,
+          77,
+          5,
+          77,
+          4
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 1,
+        "reciprocal_rank": 0.3333333333333333
+      },
+      {
+        "id": "q02",
+        "question": "What context window length does Llama 2 support during pretraining?",
+        "target_page": 5,
+        "retrieved_pages": [
+          47,
+          77,
+          34,
+          77,
+          5
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 1,
+        "reciprocal_rank": 0.2
+      },
+      {
+        "id": "q03",
+        "question": "Which architectural attention mechanism was introduced for the larger 34B and 70B models to improve inference scalability?",
+        "target_page": 5,
+        "retrieved_pages": [
+          47,
+          6,
+          42,
+          44,
+          48
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      },
+      {
+        "id": "q04",
+        "question": "What optimizer and learning rate schedule was used during the pretraining of Llama 2?",
+        "target_page": 5,
+        "retrieved_pages": [
+          77,
+          5,
+          5,
+          77,
+          4
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 1,
+        "reciprocal_rank": 0.5
+      },
+      {
+        "id": "q05",
+        "question": "What two separate reward models are trained during RLHF to reflect human preferences?",
+        "target_page": 10,
+        "retrieved_pages": [
+          52,
+          10,
+          14,
+          11,
+          15
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 1,
+        "reciprocal_rank": 0.5
+      },
+      {
+        "id": "q06",
+        "question": "What two reinforcement learning algorithms were used during the RLHF fine-tuning stages of Llama 2-Chat?",
+        "target_page": 11,
+        "retrieved_pages": [
+          32,
+          5,
+          13,
+          10,
+          77
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      },
+      {
+        "id": "q07",
+        "question": "What is Ghost Attention (GAtt) designed to control in multi-turn dialogues?",
+        "target_page": 14,
+        "retrieved_pages": [
+          54,
+          8,
+          16,
+          16,
+          56
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      },
+      {
+        "id": "q08",
+        "question": "How many hours of GPU compute were consumed during the pretraining of Llama 2 models on A100-80GB GPUs?",
+        "target_page": 18,
+        "retrieved_pages": [
+          7,
+          77,
+          8,
+          6,
+          47
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      },
+      {
+        "id": "q09",
+        "question": "What type of personal data was intentionally scrubbed from the pretraining corpus?",
+        "target_page": 5,
+        "retrieved_pages": [
+          21,
+          20,
+          39,
+          75,
+          40
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      },
+      {
+        "id": "q10",
+        "question": "What are the three primary released model parameter sizes in the Llama 2 family?",
+        "target_page": 5,
+        "retrieved_pages": [
+          8,
+          77,
+          4,
+          77,
+          6
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      },
+      {
+        "id": "q11",
+        "question": "What peak learning rate was chosen for the 7B and 13B models versus the 70B model?",
+        "target_page": 5,
+        "retrieved_pages": [
+          15,
+          5,
+          6,
+          13,
+          14
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 1,
+        "reciprocal_rank": 0.5
+      },
+      {
+        "id": "q12",
+        "question": "What methodology was employed to probe for adversarial and safety risks in Llama 2?",
+        "target_page": 22,
+        "retrieved_pages": [
+          4,
+          4,
+          35,
+          20,
+          27
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      },
+      {
+        "id": "q13",
+        "question": "What loss function formulation is used to train the Helpfulness and Safety reward models?",
+        "target_page": 11,
+        "retrieved_pages": [
+          52,
+          26,
+          60,
+          53,
+          24
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      },
+      {
+        "id": "q14",
+        "question": "What score did Llama 2 70B achieve on the MMLU 5-shot benchmark?",
+        "target_page": 8,
+        "retrieved_pages": [
+          49,
+          8,
+          48,
+          50,
+          48
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 1,
+        "reciprocal_rank": 0.5
+      },
+      {
+        "id": "q15",
+        "question": "What tokenizer library and vocabulary size was utilized for Llama 2?",
+        "target_page": 5,
+        "retrieved_pages": [
+          34,
+          47,
+          77,
+          8,
+          77
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      }
+    ]
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "evaluation_questions": 15,
+  "dense_256": {
+    "chunk_size": 256,
+    "total_questions": 15,
+    "Recall@1": 0.0,
+    "Recall@5": 0.4,
+    "MRR@5": 0.1189
+  },
+  "dense_512": {
+    "chunk_size": 512,
+    "total_questions": 15,
+    "Recall@1": 0.0,
+    "Recall@5": 0.4,
+    "MRR@5": 0.1689
+  },
+  "hybrid_256": {
+    "chunk_size": 256,
+    "total_questions": 15,
+    "Recall@1": 0.1333,
+    "Recall@5": 0.5333,
+    "MRR@5": 0.2911
+  },
+  "hybrid_512": {
+    "chunk_size": 512,
+    "total_questions": 15,
+    "Recall@1": 0.1333,
+    "Recall@5": 0.5333,
+    "MRR@5": 0.28
+  },
+  "cross_encoder_256": {
+    "chunk_size": 256,
+    "total_questions": 15,
+    "Recall@1": 0.2,
+    "Recall@5": 0.4667,
+    "MRR@5": 0.2856
+  },
+  "cross_encoder_512": {
+    "chunk_size": 512,
+    "total_questions": 15,
+    "Recall@1": 0.2,
+    "Recall@5": 0.4667,
+    "MRR@5": 0.2744
+  },
+  "best_configuration": "Hybrid Retrieval - 256 token chunks",
+  "evaluation_note": "Hit@k is based on target-page matching."
+}

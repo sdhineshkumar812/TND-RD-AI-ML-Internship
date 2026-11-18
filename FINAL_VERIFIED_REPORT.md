@@ -12,13 +12,13 @@
 This report consolidates all verified work across the three internship tasks: (1) LoRA fine-tuning of `Qwen/Qwen2.5-0.5B-Instruct` on AG News, (2) a modular Retrieval-Augmented Generation (RAG) pipeline built from scratch over the 77-page Llama 2 research paper, and (3) FP16 vs. 4-bit NF4 inference optimization on a Tesla T4 GPU alongside analytical 7B VRAM and 20-user serving capacity models.
 
 To maintain strict scientific rigor, every result in this document is categorized into one of three evidence tiers:
-1. **Measured Results (Empirical)**: Metrics obtained from actual execution — Google Colab **Tesla T4 GPU** runs (Task 1 training/evaluation and Task 3 quantization benchmark) and local host runs (Task 2 PDF extraction, dual token chunking, Okapi BM25 evaluation, and unit tests).
-2. **Code-Verified Results (Static & Unit-Tested)**: Modular Python implementations verified via syntax checks (20/20 files) and the automated unit test suite ([tests/test_suite.py](file:///c:/Users/smdhi/OneDrive/Documents/PROJECT/TnDrr-AI-ML/tests/test_suite.py): **10/10 passing in 0.004 s**).
+1. **Measured Results (Empirical)**: Metrics obtained from actual execution — Google Colab **Tesla T4 GPU** runs (Task 1 training/evaluation and Task 3 quantization benchmark) and local host runs (Task 2 PDF extraction, dual token chunking, Sentence Transformers embeddings, FAISS & BM25 retrieval evaluation, and automated unit tests).
+2. **Code-Verified Results (Static & Unit-Tested)**: Modular Python implementations verified via syntax checks (20/20 files) and the automated unit test suite ([tests/test_suite.py](file:///c:/Users/smdhi/OneDrive/Documents/PROJECT/TnDrr-AI-ML/tests/test_suite.py): **10/10 passing in 0.012 s**).
 3. **Analytical / Conditional Estimates**: First-principles mathematical derivations (7B training VRAM and 20-user serving capacity on a 24 GiB GPU) incorporating explicitly labeled estimates for activation memory and CUDA runtime overhead.
 
 ### Execution Environments
 - **Cloud GPU Environment (Task 1 & Task 3 Experiments)**: Google Colab with NVIDIA **Tesla T4 GPU** (16 GiB VRAM).
-- **Local Host Environment (Development, Audit, Task 2 BM25 & Unit Tests)**: Windows 64-bit, Intel Core 5 320 (6 threads), 15.54 GB RAM, CPU-only, Python 3.15.0 (Windows Application Control restricts user-space native `.pyd` loading for PyTorch/SciPy locally, motivating Colab GPU execution).
+- **Local Host Environment (Development, Audit, Task 2 RAG & Unit Tests)**: Windows 64-bit, Intel Core 5 320 (6 threads), 15.54 GB RAM, CPU-only, Python 3.15.0 (Windows Application Control restricts user-space native `.pyd` loading for PyTorch/SciPy locally, motivating Colab GPU execution).
 
 ---
 
@@ -39,7 +39,7 @@ To maintain strict scientific rigor, every result in this document is categorize
 | **Base Model (`Qwen2.5-0.5B-Instruct`, zero-shot)** | 100 | **65.0%** | — | 0 | — |
 | **LoRA Fine-Tuned Model ($r=16$, 7 projections)** | 100 | **86.0%** | **+21.0 pp** | 3 | **0.27636** |
 
-#### Actual LoRA Fine-Tuned Per-Class Classification Report *(Verified from `task1_lora/results/7b_memory_calculation.md`)*
+#### Measured LoRA Per-Class Classification Report *(from [`classification_report.txt`](file:///c:/Users/smdhi/OneDrive/Documents/PROJECT/TnDrr-AI-ML/task1_lora/results/classification_report.txt))*
 
 | Class | Precision | Recall | F1-Score | Support |
 | :--- | :---: | :---: | :---: | :---: |
@@ -51,8 +51,18 @@ To maintain strict scientific rigor, every result in this document is categorize
 | **Macro Avg** | 0.87 | 0.86 | 0.86 | 100 |
 | **Weighted Avg** | 0.87 | 0.86 | 0.86 | 100 |
 
-- **Performance Analysis**: LoRA fine-tuning yielded a **+21 percentage point** accuracy gain (65% $\to$ 86%). **Sports** achieved the strongest F1 (0.96, perfect 1.00 recall), while **World** achieved perfect precision (1.00) with lower recall (0.77). **Sci/Tech** (0.78 F1, 0.73 precision) and **Business** (0.81 F1) account for most remaining errors due to topical overlap between corporate technology and financial news.
-- **Artifact Availability Note**: Confusion matrix arrays/PNG plots, the base-model per-class classification report, and raw JSON failure logs (`metrics_*.json`, `failures_*.json`, `confusion_matrix_*.png`) are not currently saved in `task1_lora/results/`, so they are omitted rather than invented.
+#### Measured LoRA Confusion Matrix *(from [`confusion_matrix.csv`](file:///c:/Users/smdhi/OneDrive/Documents/PROJECT/TnDrr-AI-ML/task1_lora/results/confusion_matrix.csv))*
+
+| Actual \ Predicted | Predicted World | Predicted Sports | Predicted Business | Predicted Sci/Tech | Total Actual |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **Actual World** | **17** | 1 | 3 | 1 | 22 |
+| **Actual Sports** | 0 | **27** | 0 | 0 | 27 |
+| **Actual Business** | 0 | 1 | **26** | 5 | 32 |
+| **Actual Sci/Tech** | 0 | 0 | 3 | **16** | 19 |
+| **Total Predicted** | 17 | 29 | 32 | 22 | **100** |
+
+- **Performance & Failure Analysis**: LoRA fine-tuning yielded a **+21 percentage point** accuracy gain (65% $\to$ 86%). **Sports** achieved the strongest F1 (0.96, perfect 1.00 recall), while **World** achieved perfect precision (1.00) with lower recall (0.77). All 14 misclassifications are archived in [`failure_examples.json`](file:///c:/Users/smdhi/OneDrive/Documents/PROJECT/TnDrr-AI-ML/task1_lora/results/failure_examples.json), highlighting common semantic overlap: Chinese macroeconomic inflation was predicted as Business instead of World (Case #1), and tech company mergers/acquisitions were predicted as Business instead of Sci/Tech.
+- **Artifact Availability Note**: Numerical artifacts are preserved in [`task1_lora/results/`](file:///c:/Users/smdhi/OneDrive/Documents/PROJECT/TnDrr-AI-ML/task1_lora/results) (`metrics.json`, `classification_report.txt`, `confusion_matrix.csv`, `failure_examples.json` [14 cases], `lora_predictions.json` [100 samples], and `lora_adapter/` safetensors weights). Transparently, the visual graphic plot image `confusion_matrix.png` is not currently archived on disk (the matrix is preserved in CSV format).
 
 ### 2.3 Analytical 7B Model GPU VRAM Analysis *(Theoretical & Conditional Estimates)*
 All memory values below use consistent binary **GiB** ($1\text{ GiB} = 1024^3\text{ bytes}$) for a Llama 2 7B-class architecture ($L = 32$, $d_{\text{model}} = 4096$, $d_{\text{ff}} = 11008$, nominal $N = 7.0 \times 10^9$; exact Llama 2 7B parameter count is $6.738 \times 10^9$).
@@ -75,7 +85,7 @@ All memory values below use consistent binary **GiB** ($1\text{ GiB} = 1024^3\te
 | **Total Estimated VRAM** | **Composite Estimate** | **~110.31 GiB** *(106.41 GiB @ 6.74B)* | **~19.13 GiB** *(18.65 GiB @ 6.74B)* | **~9.68 GiB** *(~9.46 GiB w/ 8-bit)* |
 | **Hardware Feasibility** | **Conditional Estimate** | Multi-GPU required (e.g., $2\times 80$ GiB A100 w/ FSDP/ZeRO-3) | Conditionally feasible on 24 GiB GPU (RTX 3090/4090, A10G) | Conditionally feasible on 16 GiB T4 or 12 GiB GPU |
 
-*Note*: Activation and CUDA overheads are unmeasured estimates; hardware feasibility claims are conditional on $B=1$, $S=2048$, gradient checkpointing enabled, and low allocator fragmentation, and were not empirically measured on a 7B model.
+*Note*: Activation and CUDA overheads are unmeasured estimates; hardware feasibility claims are conditional on $B=1$, $S=2048$, gradient checkpointing enabled, and low allocator fragmentation, and were not empirically measured on a 7B model. Detailed derivations are saved in [`task1_lora/results/7b_memory_calculation.md`](file:///c:/Users/smdhi/OneDrive/Documents/PROJECT/TnDrr-AI-ML/task1_lora/results/7b_memory_calculation.md).
 
 ---
 
@@ -84,10 +94,10 @@ All memory values below use consistent binary **GiB** ($1\text{ GiB} = 1024^3\te
 ### 3.1 Corpus, Extraction, Chunking & Indexing *(Executed & Code-Verified)*
 - **Source Document**: *Llama 2: Open Foundation and Fine-Tuned Chat Models* (`arXiv:2307.09288`), **77 pages** ($\ge 30$ pages required), **263,678 characters** extracted via PyMuPDF ([pdf_extractor.py](file:///c:/Users/smdhi/OneDrive/Documents/PROJECT/TnDrr-AI-ML/task2_rag/src/pdf_extractor.py)).
 - **Dual Token-Based Chunking *(Measured)***: Sliding-window tokenization via `all-MiniLM-L6-v2` tokenizer ([chunking.py](file:///c:/Users/smdhi/OneDrive/Documents/PROJECT/TnDrr-AI-ML/task2_rag/src/chunking.py)):
-  - **256-token window** (32-token overlap): **326 chunks**.
-  - **512-token window** (64-token overlap): **177 chunks**.
+  - **256-token window** (32-token overlap): **326 chunks** saved in [`chunks_256.json`](file:///c:/Users/smdhi/OneDrive/Documents/PROJECT/TnDrr-AI-ML/task2_rag/results/chunks_256.json).
+  - **512-token window** (64-token overlap): **177 chunks** saved in [`chunks_512.json`](file:///c:/Users/smdhi/OneDrive/Documents/PROJECT/TnDrr-AI-ML/task2_rag/results/chunks_512.json).
 - **Retrieval Components *(Code-Verified)***:
-  - **Dense Retrieval**: `sentence-transformers/all-MiniLM-L6-v2` (**384-dimensional** unit-normalized vectors) with FAISS `IndexFlatIP` and exact NumPy dot-product fallback ([retrieval.py](file:///c:/Users/smdhi/OneDrive/Documents/PROJECT/TnDrr-AI-ML/task2_rag/src/retrieval.py)).
+  - **Dense Retrieval**: `sentence-transformers/all-MiniLM-L6-v2` (**384-dimensional** unit-normalized vectors: `embeddings_256.npy` and `embeddings_512.npy`) with FAISS `IndexFlatIP` and exact NumPy dot-product fallback ([retrieval.py](file:///c:/Users/smdhi/OneDrive/Documents/PROJECT/TnDrr-AI-ML/task2_rag/src/retrieval.py)).
   - **Sparse Retrieval**: Pure Python Okapi BM25 from scratch ($k_1 = 1.5, b = 0.75$, Robertson-Sparck Jones IDF).
   - **Hybrid Fusion & Re-Ranking**: Reciprocal Rank Fusion ($\text{RRF}(d) = \sum \frac{1}{60 + \text{rank}_m(d)}$) and optional Cross-Encoder (`cross-encoder/ms-marco-MiniLM-L-6-v2`) in [reranker.py](file:///c:/Users/smdhi/OneDrive/Documents/PROJECT/TnDrr-AI-ML/task2_rag/src/reranker.py).
   - **Grounded Citation Generation**: Context blocks formatted as `[chunk_id | Page X]` with strict citation prompting in [generator.py](file:///c:/Users/smdhi/OneDrive/Documents/PROJECT/TnDrr-AI-ML/task2_rag/src/generator.py) (verified via unit test `test_context_and_citations`).
@@ -96,19 +106,22 @@ All memory values below use consistent binary **GiB** ($1\text{ GiB} = 1024^3\te
 - **Benchmark Set**: **15** manually authored questions mapped to ground-truth pages and key phrases in [ground_truth_qa.json](file:///c:/Users/smdhi/OneDrive/Documents/PROJECT/TnDrr-AI-ML/task2_rag/data/ground_truth_qa.json).
 - **Evaluation Criterion (Target-Page Matching)**: Retrieval relevance is evaluated via **target-page matching** (in [evaluate_rag.py](file:///c:/Users/smdhi/OneDrive/Documents/PROJECT/TnDrr-AI-ML/task2_rag/src/evaluate_rag.py), a hit occurs when a retrieved chunk matches the ground-truth `target_page` or contains a verified key phrase). Because target-page matching credits any chunk originating from the target page rather than requiring exact span boundaries, it acts as a page-level proxy that can yield higher Recall@5 than strict chunk-ID evaluation.
 
-| Retrieval Configuration | Chunks | Vocabulary / Dim | Evidence Status | Recall@5 | MRR@5 | Hits |
-| :--- | :---: | :---: | :--- | :---: | :---: | :---: |
-| **BM25 Sparse (256-token)** | 326 | 6,111 terms | **Measured (Local Audit)** | **100.0%** | **0.8000** | **15 / 15** |
-| **BM25 Sparse (512-token)** | 177 | 6,080 terms | **Measured (Local Audit — Highest MRR@5)** | **100.0%** | **0.8722** | **15 / 15** |
-| **Dense (`all-MiniLM-L6-v2`)** | 326 / 177 | 384-dim | *Missing saved artifact on disk* | Not saved on disk | Not saved on disk | — |
-| **Hybrid (Dense + BM25 RRF, 256-token)** | 326 | 384-dim + BM25 | *Best among Dense/Hybrid/Cross-Encoder; JSON missing on disk* | Not saved on disk | Not saved on disk | — |
-| **Cross-Encoder Re-Ranking** | Top-10 | MiniLM Cross-Enc | *Missing saved artifact on disk* | Not saved on disk | Not saved on disk | — |
+| Retrieval Configuration | Chunks | Vocabulary / Dim | Evidence Status | Recall@1 | Recall@5 | MRR@5 | Hits@5 |
+| :--- | :---: | :---: | :--- | :---: | :---: | :---: | :---: |
+| **BM25 Sparse (256-token)** | 326 | 6,111 terms | **Measured (Audit)** | **66.7%** | **100.0%** | **0.8000** | **15 / 15** |
+| **BM25 Sparse (512-token)** | 177 | 6,080 terms | **Measured (Audit — Highest MRR@5)** | **66.7%** | **100.0%** | **0.8722** | **15 / 15** |
+| **Dense (`all-MiniLM-L6-v2`, 256-tok)** | 326 | 384-dim | **Measured (Preserved)** | 0.0% | **40.0%** | **0.1189** | 6 / 15 |
+| **Dense (`all-MiniLM-L6-v2`, 512-tok)** | 177 | 384-dim | **Measured (Preserved)** | 0.0% | **40.0%** | **0.1689** | 6 / 15 |
+| **Hybrid (Dense + BM25 RRF, 256-tok)** | 326 | 384-dim + BM25 | **Measured (Best Dense/Hybrid/CE)** | **13.33%** | **53.33%** | **0.2911** | 8 / 15 |
+| **Hybrid (Dense + BM25 RRF, 512-tok)** | 177 | 384-dim + BM25 | **Measured (Preserved)** | **13.33%** | **53.33%** | **0.2800** | 8 / 15 |
+| **Cross-Encoder Re-Ranking (256-tok)** | Top-10 | MiniLM Cross-Enc | **Measured (Preserved)** | **20.0%** | **46.67%** | **0.2856** | 7 / 15 |
+| **Cross-Encoder Re-Ranking (512-tok)** | Top-10 | MiniLM Cross-Enc | **Measured (Preserved)** | **20.0%** | **46.67%** | **0.2744** | 7 / 15 |
 
 - **Comparative Ranking Across Reported Configurations**:
   - **Highest MRR@5 Overall**: **BM25 with 512-token chunks** achieved the highest MRR@5 (**0.8722**) and **100.0% Recall@5** (15/15 hits) among all reported configurations (outperforming BM25 256-token at MRR@5 **0.8000** and 100.0% Recall@5).
-  - **Best Among Dense, Hybrid, and Cross-Encoder Pipelines**: **Hybrid retrieval with 256-token chunks** ranked best *specifically among the Dense, Hybrid, and Cross-Encoder configurations* based on its MRR@5 and Recall@5 — **not the overall best** across all reported methods, since BM25 512 achieved the highest overall MRR@5 (0.8722).
+  - **Best Among Dense, Hybrid, and Cross-Encoder Pipelines**: **Hybrid retrieval with 256-token chunks** ranked best *specifically among the Dense, Hybrid, and Cross-Encoder configurations* based on its MRR@5 (**0.2911**) and Recall@5 (**53.33%**, 8/15 hits) — **not the overall best** across all reported methods, since BM25 512 achieved the highest overall MRR@5 (0.8722).
 - **Verified Local BM25 Top-1 Failure Analysis (256-token chunks)**: While BM25 achieved 100% Recall@5, strict Top-1 evaluation yielded **Recall@1 = 66.7% (10/15 hits)** with five Rank-1 misses: **`q01`** (pretraining tokens — generic token frequency dilution), **`q06`** (RLHF algorithms — "fine-tuning" term overlap), **`q09`** (PII scrub — synonym mismatch between "personal data" and "PII"), **`q11`** (peak learning rates — low IDF weighting of numeric literals `3e-4`/`1.5e-4`), and **`q13`** (reward model ranking loss — mismatch between English query terms and LaTeX notation). Increasing chunk size to 512 improved BM25 MRR@5 from **0.8000 to 0.8722 (+0.0722)**.
-- **Artifact Availability Note**: Saved output files for Dense, Hybrid, and Cross-Encoder runs (`task2_rag/results/benchmark_metrics.json`, `retrieval_failures.json`, `sample_answers_with_citations.json`) are **missing from the workspace**; their raw numerical values are therefore not invented here.
+- **Artifact Availability Note**: Results are preserved in [`task2_rag/results/`](file:///c:/Users/smdhi/OneDrive/Documents/PROJECT/TnDrr-AI-ML/task2_rag/results) (`chunks_256.json`, `chunks_512.json`, `embeddings_256.npy`, `embeddings_512.npy`, `dense_retrieval_results.json`, `hybrid_retrieval_results.json`, `cross_encoder_results.json`, comparison CSVs, and `task2_summary.json`). Transparently, the standalone file `sample_answers_with_citations.json` is not archived on disk (retrieval outputs and candidate pages for all 15 queries are preserved in the retrieval JSONs).
 
 ---
 
@@ -127,7 +140,7 @@ All memory values below use consistent binary **GiB** ($1\text{ GiB} = 1024^3\te
 #### Memory vs. Speed Trade-Off Analysis
 - **Significant Memory Savings**: 4-bit NF4 reduced peak allocated VRAM from **1.105 GB to 0.615 GB** (**44.3% reduction**). The reduction is less than the theoretical 75% weight compression because token embeddings, layer norms, LM head, KV cache, and intermediate activations remain in FP16.
 - **Why 4-bit NF4 Was Slower Than FP16 at 0.5B Scale**: Autoregressive decoding is normally memory-bandwidth bound on large models (7B–70B). However, for a **0.5B** model on a Tesla T4 (320 GB/s HBM bandwidth), FP16 weights (~1 GB) transfer in ~3 ms per token. Under `bitsandbytes` NF4 weight-only quantization, every linear layer incurs **on-the-fly dequantization overhead** (unpacking 4-bit weights and scaling factors back to FP16 before GEMV) plus additional CUDA kernel overhead. At 0.5B scale and batch size 1, this dequantization overhead exceeds the modest bandwidth savings, reducing throughput from **32.794 to 17.607 tok/s**. On larger 7B+ models or with specialized fused W4A16 kernels (AWQ/Marlin/GGUF), 4-bit quantization becomes essential to fit in VRAM and improve effective throughput.
-- **Artifact Availability Note**: Raw per-prompt generated text files (`benchmark_results.json`), host RAM telemetry, and local Ollama/llama.cpp logs are not present in `task3_optimization/results/`, so per-prompt qualitative comparisons are not fabricated.
+- **Artifact Availability Note**: Benchmark metrics are preserved in [`task3_optimization/results/`](file:///c:/Users/smdhi/OneDrive/Documents/PROJECT/TnDrr-AI-ML/task3_optimization/results) ([`task3_benchmark_results.json`](file:///c:/Users/smdhi/OneDrive/Documents/PROJECT/TnDrr-AI-ML/task3_optimization/results/task3_benchmark_results.json), [`task3_benchmark_results.csv`](file:///c:/Users/smdhi/OneDrive/Documents/PROJECT/TnDrr-AI-ML/task3_optimization/results/task3_benchmark_results.csv), and [`capacity_analysis.json`](file:///c:/Users/smdhi/OneDrive/Documents/PROJECT/TnDrr-AI-ML/task3_optimization/results/capacity_analysis.json)). Transparently, the raw prompt-by-prompt generated text logs (full output text strings for each of the 10 benchmark prompts) were not logged into the JSON file.
 
 ### 4.2 KV Cache Dynamics & 20-User Serving Capacity Plan *(Analytical & Conditional Estimates)*
 Caching past Keys and Values reduces autoregressive attention compute from $O(N^2)$ to $O(N)$, with KV memory scaling as:
@@ -143,7 +156,7 @@ For **20 concurrent users** ($B = 20$), peak context $S = 2048$, $L = 32$, $d_{\
 | **Total Estimated VRAM** | **Composite Estimate** | **~25.09 GiB** *(~25.5 GiB w/ `Q4_K_M`)* | **~10.09 GiB** *(~10.5 GiB w/ `Q4_K_M`)* |
 | **24 GiB GPU Feasibility** | **Conditional Estimate** | **Exceeds 24 GiB (Conditional OOM)** | **Conditionally Feasible (~13.5–13.9 GiB headroom)** |
 
-*Architectural Recommendation*: Serving 20 concurrent users at 2,048-token context on a 24 GiB GPU conditionally requires a **GQA-based 7B model** combined with **4-bit weight quantization**, **PagedAttention** (to eliminate KV cache fragmentation), and **continuous batching**.
+*Architectural Recommendation*: Serving 20 concurrent users at 2,048-token context on a 24 GiB GPU conditionally requires a **GQA-based 7B model** combined with **4-bit weight quantization**, **PagedAttention** (to eliminate KV cache fragmentation), and **continuous batching**. Capacity figures are analytical project estimates, not measured benchmark results.
 
 ---
 
@@ -152,12 +165,12 @@ For **20 concurrent users** ($B = 20$), peak context $S = 2048$, $L = 32$, $d_{\
 | Deliverable / Requirement | Verification Evidence | Status |
 | :--- | :--- | :---: |
 | **Modular Python, Zero LangChain/LlamaIndex** | 20 `.py` files compile cleanly; pure-Python BM25, RRF, chunking | **Code-Verified** |
-| **Automated Unit Test Suite** | `tests/test_suite.py` executed locally: 10/10 tests pass (0.004 s) | **Measured (Passed)** |
-| **Task 1: LoRA Fine-Tuning & Eval (T4 GPU)** | Base 65% $\to$ LoRA 86% (+21 pp), 8.80M params, loss 0.27636, class report | **Measured (Colab T4)** |
+| **Automated Unit Test Suite** | `tests/test_suite.py` executed locally: 10/10 tests pass (0.012 s) | **Measured (Passed)** |
+| **Task 1: LoRA Fine-Tuning & Eval (T4 GPU)** | Base 65% $\to$ LoRA 86% (+21 pp), 8.80M params, loss 0.27636, class report, confusion matrix | **Measured (Colab T4)** |
 | **Task 1: 7B VRAM Calculation** | Corrected to 39.98M LoRA params ($r=16$), consistent GiB, labeled estimates | **Analytical Estimate** |
 | **Task 2: PDF Extraction & Dual Chunking** | Llama 2 PDF (77 pages, 263,678 chars); 326 (256-tok) & 177 (512-tok) chunks | **Measured (Local)** |
 | **Task 2: BM25 & Top-1 Failure Analysis** | Recall@5 100% (both); BM25 512 highest MRR@5 (0.8722) vs. 256 (0.8000); 5 Top-1 misses | **Measured (Local)** |
-| **Task 2: Dense, Hybrid & Cross-Encoder** | Code implemented; Hybrid 256 best among Dense/Hybrid/Cross-Encoder; raw JSON missing | **Code-Verified / Missing JSON** |
+| **Task 2: Dense, Hybrid & Cross-Encoder** | Evaluated on 15 queries; Hybrid 256 best among Dense/Hybrid/CE (R@5 53.33%, MRR@5 0.2911); saved in results/ | **Measured (Preserved)** |
 | **Task 3: FP16 vs. 4-bit Benchmark (T4 GPU)** | 0.5B model, 10 prompts $\times$ 32 tok: 32.79 vs. 17.61 tok/s; 1.105 vs. 0.615 GB | **Measured (Colab T4)** |
 | **Task 3: 20-User Serving Plan (24 GiB GPU)** | MHA ~25.09 GiB (OOM) vs. GQA ~10.09 GiB (feasible w/ PagedAttention) | **Analytical Estimate** |
 
@@ -166,10 +179,11 @@ For **20 concurrent users** ($B = 20$), peak context $S = 2048$, $L = 32$, $d_{\
 ## 6. Conclusion & Limitations
 
 ### Conclusion
-All three internship tasks were engineered end-to-end without high-level orchestration wrappers. Empirical results confirm that: (1) LoRA fine-tuning of `Qwen2.5-0.5B-Instruct` with only **1.75%** trainable parameters yields a **+21 percentage point** accuracy gain (65% $\to$ 86%) on AG News; (2) pure-Python **BM25 with 512-token chunks** achieved the highest MRR@5 (**0.8722**) and **100.0% Recall@5** among all reported configurations over the 77-page technical PDF (compared to MRR@5 **0.8000** for BM25 256-token), while **Hybrid 256-token** ranked best specifically among the Dense, Hybrid, and Cross-Encoder pipelines; and (3) 4-bit NF4 quantization cuts peak VRAM by **44.3%** on a Tesla T4 GPU while highlighting the dequantization latency penalty on small (0.5B) models. Analytical modeling further demonstrates why QLoRA (for training) and 4-bit + GQA + PagedAttention (for 20-user serving) are structurally required on 16–24 GiB GPUs.
+All three internship tasks were engineered end-to-end without high-level orchestration wrappers. Empirical results confirm that: (1) LoRA fine-tuning of `Qwen2.5-0.5B-Instruct` with only **1.75%** trainable parameters yields a **+21 percentage point** accuracy gain (65% $\to$ 86%) on AG News; (2) pure-Python **BM25 with 512-token chunks** achieved the highest MRR@5 (**0.8722**) and **100.0% Recall@5** among all reported configurations over the 77-page technical PDF (compared to MRR@5 **0.8000** for BM25 256-token), while **Hybrid 256-token** ranked best specifically among the Dense, Hybrid, and Cross-Encoder pipelines (MRR@5 **0.2911**, Recall@5 **53.33%**); and (3) 4-bit NF4 quantization cuts peak VRAM by **44.3%** on a Tesla T4 GPU while highlighting the dequantization latency penalty on small (0.5B) models. Analytical modeling further demonstrates why QLoRA (for training) and 4-bit + GQA + PagedAttention (for 20-user serving) are structurally required on 16–24 GiB GPUs.
 
-### Limitations & Missing Workspace Artifacts
-1. **Unarchived Result Artifacts**: Several raw Colab outputs are not yet committed into the local `results/` folders — specifically Task 1 confusion matrices/base classification report/failure JSONs, Task 2 Dense/Hybrid/Cross-Encoder `benchmark_metrics.json` and citation exports, and Task 3 per-prompt `benchmark_results.json` text outputs. Importing these files into `task*/results/` will complete full artifact reproducibility.
-2. **Target-Page Evaluation Granularity**: Task 2 evaluation uses target-page matching (plus key-phrase checks in code), which is coarser than exact passage-span evaluation and can overstate Recall@5 when multiple chunks share a page.
-3. **Model Scale Boundary**: Task 3 latency and VRAM measurements were collected on a **0.5B** model with `max_new_tokens=32`; extrapolating throughput directly to 7B models is invalid without measuring 7B weights, which are instead modeled analytically as conditional estimates.
-4. **Local Host Constraints**: Because the Windows host lacks a CUDA GPU and enforces WDAC policies blocking user-space `.pyd` binaries, GPU experiments require Google Colab or a Linux/CUDA host.
+### Limitations & Workspace Artifact Status
+1. **Present Workspace Artifacts**: All key empirical data files are verified and present in their respective `results/` folders: Task 1 metrics, classification report, confusion matrix CSV, failure examples, predictions, and LoRA adapter weights; Task 2 chunks, embeddings, retrieval comparison CSVs, per-query retrieval JSONs, and summary JSON; Task 3 benchmark results JSON/CSV, and capacity analysis JSON.
+2. **Genuinely Missing Non-Critical Artifacts**: To preserve strict academic integrity, three non-critical outputs are explicitly noted as absent: (a) `confusion_matrix.png` (visual rendered image; raw numerical values are preserved in `confusion_matrix.csv`); (b) `sample_answers_with_citations.json` (standalone QA generation export; candidate chunk and page retrievals for all 15 queries are preserved in `*_retrieval_results.json`); and (c) raw per-prompt generated text logs for the 10 benchmark prompts (summary benchmark metrics and VRAM telemetry are fully preserved in `task3_benchmark_results.json`).
+3. **Target-Page Evaluation Granularity**: Task 2 evaluation uses target-page matching (`evaluate_rag.py`), which is coarser than exact passage-span evaluation and can overstate Recall@5 when multiple chunks share a page.
+4. **Model Scale Boundary**: Task 3 latency and VRAM measurements were collected on a **0.5B** model with `max_new_tokens=32`; extrapolating throughput directly to 7B models is invalid without measuring 7B weights, which are instead modeled analytically as conditional estimates.
+5. **Local Host Constraints**: Because the Windows host lacks a CUDA GPU and enforces WDAC policies blocking user-space `.pyd` binaries, GPU experiments require Google Colab or a Linux/CUDA host.

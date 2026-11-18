@@ -1,0 +1,444 @@
+{
+  "256": {
+    "metrics": {
+      "chunk_size": 256,
+      "total_questions": 15,
+      "Recall@1": 0.1333,
+      "Recall@5": 0.5333,
+      "MRR@5": 0.2911
+    },
+    "results": [
+      {
+        "id": "q01",
+        "target_page": 5,
+        "retrieved_pages": [
+          6,
+          6,
+          5,
+          2,
+          7
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 1,
+        "reciprocal_rank": 0.3333333333333333
+      },
+      {
+        "id": "q02",
+        "target_page": 5,
+        "retrieved_pages": [
+          47,
+          5,
+          56,
+          54,
+          47
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 1,
+        "reciprocal_rank": 0.5
+      },
+      {
+        "id": "q03",
+        "target_page": 5,
+        "retrieved_pages": [
+          6,
+          48,
+          42,
+          47,
+          54
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      },
+      {
+        "id": "q04",
+        "target_page": 5,
+        "retrieved_pages": [
+          5,
+          2,
+          5,
+          70,
+          12
+        ],
+        "hit_at_1": 1,
+        "hit_at_5": 1,
+        "reciprocal_rank": 1.0
+      },
+      {
+        "id": "q05",
+        "target_page": 10,
+        "retrieved_pages": [
+          10,
+          13,
+          32,
+          17,
+          13
+        ],
+        "hit_at_1": 1,
+        "hit_at_5": 1,
+        "reciprocal_rank": 1.0
+      },
+      {
+        "id": "q06",
+        "target_page": 11,
+        "retrieved_pages": [
+          32,
+          13,
+          2,
+          5,
+          13
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      },
+      {
+        "id": "q07",
+        "target_page": 14,
+        "retrieved_pages": [
+          16,
+          54,
+          8,
+          54,
+          16
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      },
+      {
+        "id": "q08",
+        "target_page": 18,
+        "retrieved_pages": [
+          7,
+          7,
+          77,
+          77,
+          35
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      },
+      {
+        "id": "q09",
+        "target_page": 5,
+        "retrieved_pages": [
+          21,
+          5,
+          20,
+          20,
+          2
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 1,
+        "reciprocal_rank": 0.5
+      },
+      {
+        "id": "q10",
+        "target_page": 5,
+        "retrieved_pages": [
+          77,
+          6,
+          8,
+          2,
+          43
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      },
+      {
+        "id": "q11",
+        "target_page": 5,
+        "retrieved_pages": [
+          6,
+          5,
+          15,
+          49,
+          13
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 1,
+        "reciprocal_rank": 0.5
+      },
+      {
+        "id": "q12",
+        "target_page": 22,
+        "retrieved_pages": [
+          4,
+          4,
+          3,
+          27,
+          26
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      },
+      {
+        "id": "q13",
+        "target_page": 11,
+        "retrieved_pages": [
+          52,
+          10,
+          53,
+          17,
+          11
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 1,
+        "reciprocal_rank": 0.2
+      },
+      {
+        "id": "q14",
+        "target_page": 8,
+        "retrieved_pages": [
+          49,
+          49,
+          8,
+          8,
+          48
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 1,
+        "reciprocal_rank": 0.3333333333333333
+      },
+      {
+        "id": "q15",
+        "target_page": 5,
+        "retrieved_pages": [
+          6,
+          77,
+          20,
+          6,
+          41
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      }
+    ]
+  },
+  "512": {
+    "metrics": {
+      "chunk_size": 512,
+      "total_questions": 15,
+      "Recall@1": 0.1333,
+      "Recall@5": 0.5333,
+      "MRR@5": 0.28
+    },
+    "results": [
+      {
+        "id": "q01",
+        "target_page": 5,
+        "retrieved_pages": [
+          6,
+          2,
+          77,
+          5,
+          47
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 1,
+        "reciprocal_rank": 0.25
+      },
+      {
+        "id": "q02",
+        "target_page": 5,
+        "retrieved_pages": [
+          47,
+          5,
+          47,
+          54,
+          20
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 1,
+        "reciprocal_rank": 0.5
+      },
+      {
+        "id": "q03",
+        "target_page": 5,
+        "retrieved_pages": [
+          6,
+          48,
+          47,
+          42,
+          5
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 1,
+        "reciprocal_rank": 0.2
+      },
+      {
+        "id": "q04",
+        "target_page": 5,
+        "retrieved_pages": [
+          5,
+          2,
+          49,
+          12,
+          15
+        ],
+        "hit_at_1": 1,
+        "hit_at_5": 1,
+        "reciprocal_rank": 1.0
+      },
+      {
+        "id": "q05",
+        "target_page": 10,
+        "retrieved_pages": [
+          10,
+          14,
+          17,
+          13,
+          13
+        ],
+        "hit_at_1": 1,
+        "hit_at_5": 1,
+        "reciprocal_rank": 1.0
+      },
+      {
+        "id": "q06",
+        "target_page": 11,
+        "retrieved_pages": [
+          32,
+          13,
+          2,
+          10,
+          77
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      },
+      {
+        "id": "q07",
+        "target_page": 14,
+        "retrieved_pages": [
+          54,
+          16,
+          8,
+          56,
+          17
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      },
+      {
+        "id": "q08",
+        "target_page": 18,
+        "retrieved_pages": [
+          7,
+          77,
+          77,
+          2,
+          35
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      },
+      {
+        "id": "q09",
+        "target_page": 5,
+        "retrieved_pages": [
+          21,
+          20,
+          20,
+          39,
+          47
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      },
+      {
+        "id": "q10",
+        "target_page": 5,
+        "retrieved_pages": [
+          50,
+          2,
+          77,
+          6,
+          50
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      },
+      {
+        "id": "q11",
+        "target_page": 5,
+        "retrieved_pages": [
+          49,
+          5,
+          15,
+          50,
+          13
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 1,
+        "reciprocal_rank": 0.5
+      },
+      {
+        "id": "q12",
+        "target_page": 22,
+        "retrieved_pages": [
+          4,
+          4,
+          27,
+          45,
+          2
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      },
+      {
+        "id": "q13",
+        "target_page": 11,
+        "retrieved_pages": [
+          53,
+          60,
+          10,
+          11,
+          52
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 1,
+        "reciprocal_rank": 0.25
+      },
+      {
+        "id": "q14",
+        "target_page": 8,
+        "retrieved_pages": [
+          49,
+          8,
+          48,
+          48,
+          50
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 1,
+        "reciprocal_rank": 0.5
+      },
+      {
+        "id": "q15",
+        "target_page": 5,
+        "retrieved_pages": [
+          6,
+          77,
+          49,
+          20,
+          75
+        ],
+        "hit_at_1": 0,
+        "hit_at_5": 0,
+        "reciprocal_rank": 0
+      }
+    ]
+  }
+}
