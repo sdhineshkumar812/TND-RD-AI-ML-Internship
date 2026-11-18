@@ -28,9 +28,20 @@ def download_benchmark_pdf(
             
     print(f"Downloading public document collection from: {url}...")
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+    try:
+        import certifi, ssl
+        ssl_ctx = ssl.create_default_context(cafile=certifi.where())
+    except Exception:
+        ssl_ctx = None
+
     req = urllib.request.Request(url, headers=headers)
-    with urllib.request.urlopen(req) as response, open(save_path, "wb") as out_file:
-        out_file.write(response.read())
+    try:
+        with urllib.request.urlopen(req, context=ssl_ctx) as response, open(save_path, "wb") as out_file:
+            out_file.write(response.read())
+    except Exception as e:
+        print(f"urllib download failed ({e}), attempting system curl fallback...")
+        import subprocess
+        subprocess.run(["curl.exe", "-L", "-o", save_path, url], check=True)
         
     doc = fitz.open(save_path)
     page_count = len(doc)
@@ -44,3 +55,4 @@ def download_benchmark_pdf(
 
 if __name__ == "__main__":
     download_benchmark_pdf()
+

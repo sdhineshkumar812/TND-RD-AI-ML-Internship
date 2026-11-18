@@ -61,3 +61,13 @@ This breakdown calculates the exact GPU memory required to train a standard 7-Bi
 - **Full fine-tuning (118 GB)** is prohibitively expensive for consumer or single-GPU setups, mandating multi-GPU clusters (e.g. 2x A100-80GB or 4x A100-40GB) with FSDP or DeepSpeed ZeRO-3.
 - **LoRA (19.8 GB)** allows fine-tuning on a single high-end consumer GPU (RTX 3090 / 4090 24GB).
 - **QLoRA (9.3 GB)** democratizes 7B model training, allowing high-quality instruction fine-tuning directly on a **free Google Colab T4 (16GB)** or a budget RTX 3060 (12GB) GPU.
+              precision    recall  f1-score   support
+
+       World       1.00      0.77      0.87        22
+      Sports       0.93      1.00      0.96        27
+    Business       0.81      0.81      0.81        32
+    Sci/Tech       0.73      0.84      0.78        19
+
+    accuracy                           0.86       100
+   macro avg       0.87      0.86      0.86       100
+weighted avg       0.87      0.86      0.86       100
